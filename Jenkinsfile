@@ -7,7 +7,7 @@ pipeline {
     stages {
         stage('Pre') {
             steps {
-                echo 'Hello world - Pre......AA'
+                echo 'Hello world - Pre......AAsssdas'
             }
         }
         stage('Build') {
