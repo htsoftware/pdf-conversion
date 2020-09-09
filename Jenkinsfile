@@ -13,7 +13,8 @@ pipeline {
         }
         stage('Restore') {
             steps {
-                sh 'dotnet restore $WORKSPACE/PdfConversion/PdfConversion.csproj'    
+                // sh 'dotnet restore $WORKSPACE/PdfConversion/PdfConversion.csproj'
+                sh 'ls /app/build'   
             }
         }
         stage('Build') {
