@@ -7,5 +7,5 @@ COPY . .
 RUN dotnet restore "PdfConversion/PdfConversion.csproj"
 RUN dotnet publish "PdfConversion/PdfConversion.csproj" -c Release -o /app/build
 
-WORKDIR /app
-COPY --from=build /app .
+#WORKDIR /app
+#COPY --from=build /app .
