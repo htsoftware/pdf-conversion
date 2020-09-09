@@ -7,6 +7,7 @@ COPY . .
 RUN dotnet restore "PdfConversion/PdfConversion.csproj"
 RUN dotnet build "PdfConversion/PdfConversion.csproj" -c Release -o /app/build
 
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster
 WORKDIR /app
 COPY --from=build /app/build .
 ENTRYPOINT ["dotnet", "PdfConversion.dll"]
