@@ -1,13 +1,13 @@
 pipeline {
     agent {
-        docker {
-            image 'node:14-alpine'
-        }
+        dockerfile true
     }
     stages {
         stage('Pre') {
             steps {
-                echo 'Hello world - Pre......KK'
+                echo 'Hello world - Pre...'
+                echo '$WORKSPACE/'
+                sh 'ls $WORKSPACE/'
             }
         }
         stage('Build') {
