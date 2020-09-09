@@ -5,9 +5,10 @@ pipeline {
     stages {
         stage('Pre') {
             steps {
-                echo 'Hello world - Pre...'
+                echo '- Step 0: Preparation'
                 echo '$WORKSPACE/'
                 sh 'ls $WORKSPACE/'
+                sh 'dotnet --version'
             }
         }
         stage('Build') {
