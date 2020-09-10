@@ -11,13 +11,15 @@ pipeline {
                 sh 'dotnet --version'
             }
         }
-        stage('Restore') {
+        stage('Build') {
             steps {
-                // sh 'dotnet restore $WORKSPACE/PdfConversion/PdfConversion.csproj'
-                sh 'ls /app/build'   
+                echo '- Step 1: Build'
+                sh 'ls /app/build -p'
+                sh 'cp -r /app/build/ $WORKSPACE/'
+                sh 'ls -lh $WORKSPACE/'
             }
         }
-        stage('Build') {
+        stage('Deploy') {
             steps {
                 echo 'Hello world - Building...'
             }
