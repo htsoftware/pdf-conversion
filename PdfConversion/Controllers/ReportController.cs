@@ -32,7 +32,7 @@ namespace PdfConversion.Controllers
         [HttpPost]
         public async Task<IActionResult> ExportToPdf([FromBody] ReportExportingRequest request)
         {
-            return await _reportService.ExportToPdf(request.HtmlContent);
+            return await _reportService.ExportToPdf(request.HtmlContent)
         }
     }
 }
