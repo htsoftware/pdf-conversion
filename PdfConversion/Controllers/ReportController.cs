@@ -9,7 +9,7 @@ using PdfConversion.Helper;
 namespace PdfConversion.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class ReportController : ControllerBase
     {
         private readonly ILogger<ReportController> _logger;
