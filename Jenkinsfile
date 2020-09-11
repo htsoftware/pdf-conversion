@@ -1,8 +1,9 @@
 node {
     try {
-        stage('Pre') {
+        stage('Checkout') {
             echo '$WORKSPACE'
             echo 'Checkout branch ' + env.BRANCH_NAME
+            checkout scm
             sh 'ls $WORKSPACE'
         }
         stage('StagingBuild') {
