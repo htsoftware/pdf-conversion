@@ -1,28 +1,34 @@
-pipeline {
-    agent {
-        dockerfile true
-    }
-    stages {
+node {
+    try {
         stage('Pre') {
-            steps {
-                echo '- Step 0: Preparation'
-                echo '$WORKSPACE/'
-                sh 'ls $WORKSPACE/'
-                sh 'dotnet --version'
+            echo 'Checkout branch ' + env.BRANCH_NAME
+        }
+        stage('StagingBuild') {
+            def customImage = docker.build("my-image:${env.BUILD_ID}")
+            customImage.inside {
+                sh 'cp -r /app/build/ $WORKSPACE'
+                sh 'ls -lh $WORKSPACE'
             }
         }
-        stage('Build') {
-            steps {
-                echo '- Step 1: Build'
-                sh 'ls /app/build -p'
-                sh 'cp -r /app/build/ $WORKSPACE/'
-                sh 'ls -lh $WORKSPACE/'
+        stage('StagingDeploy') {
+            if (env.BRANCH_NAME == 'develop') {
+                withCredentials([string(credentialsId: '60c0076e-70e9-47ad-9752-bc769dba9c36', variable: 'STAGING_USER_HOST'),]) {
+                    sshagent(credentials: ['01720db2-a084-4baa-b256-665aa949424c']) {
+                        sh 'ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $STAGING_USER_HOST \'chown dmdtfs /opt/dmdt-fs/pdf-conversion\''
+                        sh 'ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $STAGING_USER_HOST \'rm -rf /opt/dmdt-fs/pdf-conversion/*\''
+                        sh 'scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -r build/* $STAGING_USER_HOST:/opt/dmdt-fs/pdf-conversion/'
+                        sh 'ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $STAGING_USER_HOST \'systemctl restart pdf-conversion-service\''
+                    }
+                }
             }
         }
-        stage('Deploy') {
-            steps {
-                echo 'Hello world - Building...'
-            }
+    }
+    catch(exc) {
+        echo 'Failed'
+    }
+    finally {
+        stage('Cleanup') {
+            cleanWs()
         }
     }
 }
