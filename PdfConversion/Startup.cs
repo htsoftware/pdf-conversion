@@ -24,14 +24,13 @@ namespace PdfConversion
             services.AddTransient<IReportService, ReportService>();
             services.AddCors(options =>
             {
-                options.AddPolicy("AllowAll",
+                options.AddPolicy("AppCORSPolicy",
                     builder =>
                     {
                         builder
                         .AllowAnyOrigin()
                         .AllowAnyMethod()
-                        .AllowAnyHeader()
-                        .AllowCredentials();
+                        .AllowAnyHeader();
                     });
             });
         }
@@ -43,7 +42,7 @@ namespace PdfConversion
 
             app.UseRouting();
 
-            app.UseCors();
+            app.UseCors("AppCORSPolicy");
 
             app.UseAuthorization();
 
