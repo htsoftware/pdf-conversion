@@ -1,7 +1,9 @@
 node {
     try {
         stage('Pre') {
+            echo '$WORKSPACE'
             echo 'Checkout branch ' + env.BRANCH_NAME
+            sh 'ls $WORKSPACE'
         }
         stage('StagingBuild') {
             def customImage = docker.build("my-image:${env.BUILD_ID}")
@@ -25,6 +27,7 @@ node {
     }
     catch(exc) {
         echo 'Failed'
+        throw exc
     }
     finally {
         stage('Cleanup') {
