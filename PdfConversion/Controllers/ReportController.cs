@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using PdfConversion.Contracts;
@@ -7,6 +8,7 @@ using PdfConversion.Helper;
 
 namespace PdfConversion.Controllers
 {
+    [DisableCors]
     [ApiController]
     [Route("[controller]")]
     public class ReportController : ControllerBase
