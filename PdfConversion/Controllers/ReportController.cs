@@ -8,7 +8,6 @@ using PdfConversion.Helper;
 
 namespace PdfConversion.Controllers
 {
-    [DisableCors]
     [ApiController]
     [Route("[controller]")]
     public class ReportController : ControllerBase
