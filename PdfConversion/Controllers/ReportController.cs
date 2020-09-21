@@ -1,5 +1,4 @@
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using PdfConversion.Contracts;
@@ -27,13 +26,14 @@ namespace PdfConversion.Controllers
         {
             _logger.LogInformation("Serving convert html to pdf");
             var htmlContent = await HtmlReader.ReadHtmlFile();
-            return await _reportService.ExportToPdf(htmlContent);
+            return await _reportService.ExportToPdf(htmlContent, false);
         }
 
         [HttpPost]
-        public async Task<IActionResult> ExportToPdf([FromBody] ReportExportingRequest request)
+        public async Task<IActionResult> ExportToPdf([FromBody] ReportExportingRequest request,
+            [FromQuery] bool rotate)
         {
-            return await _reportService.ExportToPdf(request.HtmlContent);
+            return await _reportService.ExportToPdf(request.HtmlContent, rotate);
         }
     }
 }
