@@ -25,6 +25,18 @@ node {
                 }
             }
         }
+        stage('ProductionDeploy') {
+            if (env.BRANCH_NAME == 'master') {
+                withCredentials([string(credentialsId: 'e1459576-292e-47b9-bf44-48e20bdfa54c', variable: 'PRODUCTION_USER_HOST'),]) {
+                    sshagent(credentials: ['01720db2-a084-4baa-b256-665aa949424c']) {
+                        sh 'ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $PRODUCTION_USER_HOST \'chown dmdtfs /opt/dmdt-fs/pdf-conversion\''
+                        sh 'ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $PRODUCTION_USER_HOST \'rm -rf /opt/dmdt-fs/pdf-conversion/*\''
+                        sh 'scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -r build/* $PRODUCTION_USER_HOST:/opt/dmdt-fs/pdf-conversion/'
+                        sh 'ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $PRODUCTION_USER_HOST \'systemctl restart pdf-conversion-service\''
+                    }
+                }
+            }
+        }
     }
     catch(exc) {
         echo 'Failed'
