@@ -19,8 +19,9 @@ namespace PdfConversion.Services
             _logger = logger;
         }
 
-        public async Task<FileStreamResult> ExportToPdf(string htmlContent)
+        public async Task<FileStreamResult> ExportToPdf(string htmlContent, bool rotate)
         {
+            var pageSize = rotate ? PageSize.A4.Rotate() : PageSize.A4;
             var convertRequest = new ConvertRequest
             {
                 Content = htmlContent,
@@ -28,7 +29,7 @@ namespace PdfConversion.Services
             };
 
             var pdfConverter = new PdfHtmConverter(convertRequest);
-            var memoryStream = pdfConverter.ManipulatePdf(PageSize.A4.Rotate());
+            var memoryStream = pdfConverter.ManipulatePdf(pageSize);
 
             var guid = Guid.NewGuid();
             var outputFilePath = $"report_{guid}.pdf";
