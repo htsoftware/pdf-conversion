@@ -142,5 +142,6 @@
       <Folder Include="Dto\" />
       <Folder Include="Services\" />
       <Folder Include="Contracts\" />
+      <Folder Include="Custom\" />
     </ItemGroup>
 </Project>

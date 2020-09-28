@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Text;
+using FSReport.Custom;
 using iText.Html2pdf;
 using iText.Html2pdf.Resolver.Font;
 using iText.IO.Util;
@@ -21,6 +22,7 @@ namespace PdfConversion.Helper
         public const string FONT_DIRECTORY = "./Fonts/";
         public const string FONT_TIMES_NEW_ROMAN = "./Fonts/times.ttf";
         public const float REGULAR_FONT_SIZE = 12;
+        public const float FOOTER_FONT_SIZE = 9.8f;
 
         protected readonly ConvertRequest _convertRequest;
 
@@ -36,6 +38,7 @@ namespace PdfConversion.Helper
             var memoryStream = new MemoryStream();
 
             var properties = new ConverterProperties();
+            properties.SetTagWorkerFactory(new CustomTagWorkerFactory());
             var defaultFontProvider = new DefaultFontProvider(true, true, false);
             defaultFontProvider.AddDirectory(FONT_DIRECTORY);
             properties.SetFontProvider(defaultFontProvider);
@@ -143,7 +146,7 @@ namespace PdfConversion.Helper
 
                 var canvas = new Canvas(new PdfCanvas(page), new Rectangle(coordX, coordY, canvasWidth, canvasHeight));
                 canvas.SetFontProvider(new DefaultFontProvider(true, true, true));
-                canvas.SetFontSize(REGULAR_FONT_SIZE);
+                canvas.SetFontSize(FOOTER_FONT_SIZE);
                 canvas.SetFont(PdfFontFactory.CreateFont(FONT_TIMES_NEW_ROMAN));
 
                 var pageFooter = _footer.Replace(PdfFormation.PAGE_NUMBER_TEMPLATE, pdf.GetPageNumber(page).ToString());
